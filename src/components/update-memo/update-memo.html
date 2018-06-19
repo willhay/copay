@@ -1,0 +1,13 @@
+<div ion-item [ngClass]="{'no-border': doUpdateMemoInfo}" (mousedown)="toggleMemoUpdate()">
+    <ng-content select="[memo-label]"></ng-content>
+    <div [ngClass]="{'saving-memo': true, 'spin-fade': updatingMemo}">
+    </div>
+    <div class="item-memo" *ngIf="!doUpdateMemoInfo && value">
+        <ion-note>{{value}}</ion-note>
+    </div>
+</div>
+
+<ion-item class="memo-input" *ngIf="doUpdateMemoInfo">
+    <ion-textarea #focusMe [formControl]="textInput" (ionBlur)="saveMemoNow()" [ngClass]="{'memo-text': true, 'memo-text-fix': isCordova}"
+        [(ngModel)]="value" placeholder="Enter a transaction memo"></ion-textarea>
+</ion-item>

@@ -1,0 +1,78 @@
+update-memo {
+  ion-item {
+    &.memo-input.item.item-block.item-md,
+    &.memo-input.item.item-block.ng-valid.item-input-has-value:not(.item-input-has-focus),
+    &.memo-input.item.item-block.ng-valid.item-input.input-has-value:not(.input-has-focus) {
+      border-bottom: none;
+      box-shadow: none;
+      .item-inner {
+        border-top: none;
+        border-bottom-color: rgb(244, 244, 244);
+        box-shadow: none;
+        -webkit-box-shadow: none;
+      }
+    }
+  }
+  .memo-text {
+    textarea {
+      padding: 0px 6px 33px 0px;
+      margin: 0px;
+      width: 100%;
+    }
+  }
+  .memo-text-fix textarea {
+    margin-left: -3px;
+  }
+  .memo-input {
+    margin-top: -10px;
+  }
+  .saving-memo {
+    float: right;
+    padding-bottom: 0px;
+    border: 2px solid white;
+    border-top: 2px solid color($colors, success);
+    border-left: 2px solid color($colors, success);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+  .spin-fade {
+    animation: spin-fade 2s linear;
+    animation-iteration-count: infinite;
+    opacity: 1;
+  }
+  @keyframes spin-fade {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+    15% {
+      opacity: 1;
+    }
+    25% {
+      transform: rotate(360deg);
+    }
+    50% {
+      transform: rotate(720deg);
+    }
+    75% {
+      opacity: 1;
+      transform: rotate(1080deg);
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(1440deg);
+    }
+  }
+  .no-border.item-block .item-inner {
+    border-bottom: none;
+  }
+  .item-memo {
+    padding-top: 4px;
+    ion-note {
+      white-space: pre-wrap;
+    }
+  }
+}

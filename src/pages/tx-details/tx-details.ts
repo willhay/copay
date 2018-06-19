@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
@@ -23,6 +24,10 @@ export class TxDetailsPage {
   private txId: string;
   private config;
   private blockexplorerUrl: string;
+  public textInput = new FormControl('');
+  public updatingMemo: boolean;
+  @ViewChild('focusMe') myInput;
+  @ViewChild('loading') loading: ElementRef;
 
   public wallet;
   public btx;
@@ -34,6 +39,7 @@ export class TxDetailsPage {
   public copayerId: string;
   public txsUnsubscribedForNotifications: boolean;
   public contactName: string;
+  public txMemo: string;
 
   constructor(
     private addressBookProvider: AddressBookProvider,
@@ -50,9 +56,12 @@ export class TxDetailsPage {
     private txFormatProvider: TxFormatProvider,
     private walletProvider: WalletProvider,
     private translate: TranslateService
-  ) {
+  ) {}
+
+  ionViewDidLoad() {
     this.config = this.configProvider.get();
 
+    this.updatingMemo = false;
     this.txId = this.navParams.data.txid;
     this.title = this.translate.instant('Transaction');
     this.wallet = this.profileProvider.getWallet(this.navParams.data.walletId);
@@ -186,6 +195,13 @@ export class TxDetailsPage {
             2
           ) + '%';
 
+        if (!this.btx.note) {
+          this.txMemo = this.btx.message;
+        }
+        if (this.btx.note && this.btx.note.body) {
+          this.txMemo = this.btx.note.body;
+        }
+
         if (this.btx.action != 'invalid') {
           if (this.btx.action == 'sent')
             this.title = this.translate.instant('Sent Funds');
@@ -220,38 +236,24 @@ export class TxDetailsPage {
       });
   }
 
-  public showCommentPopup(): void {
-    let opts: { defaultText?: any } = {};
-    if (this.btx.message) {
-      opts.defaultText = this.btx.message;
-    }
-    if (this.btx.note && this.btx.note.body)
-      opts.defaultText = this.btx.note.body;
+  public async saveMemoInfo(memo: string): Promise<void> {
+    this.btx.note = {
+      body: memo
+    };
+    this.logger.debug('Saving memo');
 
-    this.popupProvider
-      .ionicPrompt(this.wallet.name, this.translate.instant('Memo'), opts)
-      .then((text: string) => {
-        if (text == null) return;
+    let args = {
+      txid: this.btx.txid,
+      body: memo
+    };
 
-        this.btx.note = {
-          body: text
-        };
-        this.logger.debug('Saving memo');
-
-        let args = {
-          txid: this.btx.txid,
-          body: text
-        };
-
-        this.walletProvider
-          .editTxNote(this.wallet, args)
-          .then(() => {
-            this.logger.info('Tx Note edited');
-          })
-          .catch(err => {
-            this.logger.debug('Could not save tx comment ' + err);
-          });
+    await this.walletProvider
+      .editTxNote(this.wallet, args)
+      .catch((err: any) => {
+        this.logger.debug('Could not save tx comment ' + err);
       });
+
+    this.logger.info('Tx Note edited');
   }
 
   public viewOnBlockchain(): void {
