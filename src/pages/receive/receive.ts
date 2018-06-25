@@ -37,6 +37,7 @@ export class ReceivePage extends WalletTabsChild {
   public showShareButton: boolean;
   public loading: boolean;
   public isOpenSelector: boolean;
+  public playAnimation: boolean;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -63,6 +64,7 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   ionViewWillEnter() {
+    this.playAnimation = false;
     this.isOpenSelector = false;
     this.events.subscribe('bwsEvent', (walletId, type) => {
       // Update current address
