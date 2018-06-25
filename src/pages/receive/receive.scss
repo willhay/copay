@@ -226,24 +226,14 @@ page-receive {
     margin: 2px;
   }
   .spin-fast {
-    animation: spin-fast 2s linear;
-    animation-iteration-count: infinite;
+    animation: spin-fast 0.5s linear infinite;
   }
   @keyframes spin-fast {
-    0% {
+    from {
       transform: rotate(0deg);
     }
-    25% {
+    to {
       transform: rotate(360deg);
-    }
-    50% {
-      transform: rotate(720deg);
-    }
-    75% {
-      transform: rotate(1080deg);
-    }
-    100% {
-      transform: rotate(1440deg);
     }
   }
 }
