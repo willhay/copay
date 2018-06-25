@@ -1,4 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  EmbeddedViewRef,
+  Injector,
+  Renderer,
+  ViewChild
+} from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -9,7 +17,7 @@ import {
   NavController,
   Platform
 } from 'ionic-angular';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 // providers
 import { AmazonProvider } from '../providers/amazon/amazon';
@@ -33,6 +41,7 @@ import { CopayersPage } from '../pages/add/copayers/copayers';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
+import { WalletSelectorPage } from '../pages/includes/wallet-selector/wallet-selector';
 import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
 import { GlideraPage } from '../pages/integrations/glidera/glidera';
@@ -45,6 +54,7 @@ import { ConfirmPage } from '../pages/send/confirm/confirm';
 import { AddressbookAddPage } from '../pages/settings/addressbook/add/add';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
+import { WalletTabsProvider } from '../pages/wallet-tabs/wallet-tabs.provider';
 
 // As the handleOpenURL handler kicks in before the App is started,
 // declare the handler function at the top of app.component.ts (outside the class definition)
@@ -103,7 +113,12 @@ export class CopayApp {
     private popupProvider: PopupProvider,
     private pushNotificationsProvider: PushNotificationsProvider,
     private app: App,
-    private incomingDataProvider: IncomingDataProvider
+    private incomingDataProvider: IncomingDataProvider,
+    private walletTabsProvider: WalletTabsProvider,
+    private renderer: Renderer,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private appRef: ApplicationRef,
+    private injector: Injector
   ) {
     this.initializeApp();
   }
@@ -117,6 +132,7 @@ export class CopayApp {
       .ready()
       .then(readySource => {
         this.onPlatformReady(readySource);
+        this.appendComponentToBody(WalletSelectorPage);
       })
       .catch(e => {
         this.logger.error('Platform is not ready.', e);
@@ -175,6 +191,7 @@ export class CopayApp {
 
     this.registerIntegrations();
     this.incomingDataRedirEvent();
+    this.scanFromWalletEvent();
     // Check Profile
     this.profile
       .loadAndBindProfile()
@@ -283,9 +300,43 @@ export class CopayApp {
 
   private incomingDataRedirEvent(): void {
     this.events.subscribe('IncomingDataRedir', nextView => {
-      const tabNav = this.getSelectedTabNav();
-      tabNav.push(this.pageMap[nextView.name], nextView.params);
+      this.closeScannerFromWithinWallet();
+      this.getSelectedTabNav().push(
+        this.pageMap[nextView.name],
+        nextView.params
+      );
     });
+  }
+
+  private scanFromWalletEvent(): void {
+    this.events.subscribe('ScanFromWallet', async () => {
+      await this.getGlobalTabs().select(1);
+      await this.toggleScannerVisibilityFromWithinWallet(true, 300);
+    });
+    this.events.subscribe('ExitScan', async () => {
+      this.closeScannerFromWithinWallet();
+    });
+  }
+
+  private async closeScannerFromWithinWallet() {
+    if (!this.getWalletDetailsModal()) {
+      return;
+    }
+    await this.toggleScannerVisibilityFromWithinWallet(false, 300);
+    await this.getGlobalTabs().select(0);
+  }
+
+  private toggleScannerVisibilityFromWithinWallet(
+    visible: boolean,
+    transitionDuration: number
+  ): Promise<number> {
+    const walletDetailsModal = this.getWalletDetailsModal();
+    this.renderer.setElementClass(walletDetailsModal, 'scanning', visible);
+    return Observable.timer(transitionDuration).toPromise();
+  }
+
+  private getWalletDetailsModal(): Element {
+    return document.getElementsByClassName('wallet-details-modal')[0];
   }
 
   private initPushNotifications() {
@@ -366,8 +417,22 @@ export class CopayApp {
   }
 
   private getSelectedTabNav() {
-    return this.nav
-      .getActiveChildNavs()[0]
-      .viewCtrl.instance.tabs.getSelected();
+    const globalNav = this.getGlobalTabs().getSelected();
+    const walletTabs = this.walletTabsProvider.getTabNav();
+    return (walletTabs && walletTabs.getSelected()) || globalNav;
+  }
+
+  private getGlobalTabs() {
+    return this.nav.getActiveChildNavs()[0].viewCtrl.instance.tabs;
+  }
+
+  private appendComponentToBody(component: any) {
+    const componentRef = this.componentFactoryResolver
+      .resolveComponentFactory(component)
+      .create(this.injector);
+    this.appRef.attachView(componentRef.hostView);
+    const domElem = (componentRef.hostView as EmbeddedViewRef<any>)
+      .rootNodes[0] as HTMLElement;
+    document.getElementsByTagName('ion-app')[0].appendChild(domElem);
   }
 }

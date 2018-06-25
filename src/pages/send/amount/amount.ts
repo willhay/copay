@@ -18,6 +18,7 @@ import { RateProvider } from '../../../providers/rate/rate';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 
 // Pages
+import { ProfileProvider } from '../../../providers/profile/profile';
 import { BuyAmazonPage } from '../../integrations/amazon/buy-amazon/buy-amazon';
 import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
 import { BuyCoinbasePage } from '../../integrations/coinbase/buy-coinbase/buy-coinbase';
@@ -27,13 +28,16 @@ import { SellGlideraPage } from '../../integrations/glidera/sell-glidera/sell-gl
 import { BuyMercadoLibrePage } from '../../integrations/mercado-libre/buy-mercado-libre/buy-mercado-libre';
 import { ShapeshiftConfirmPage } from '../../integrations/shapeshift/shapeshift-confirm/shapeshift-confirm';
 import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
+import { WalletTabsChild } from '../../wallet-tabs/wallet-tabs-child';
+import { WalletTabsProvider } from '../../wallet-tabs/wallet-tabs.provider';
 import { ConfirmPage } from '../confirm/confirm';
+import { SendPage } from '../send';
 
 @Component({
   selector: 'page-amount',
   templateUrl: 'amount.html'
 })
-export class AmountPage {
+export class AmountPage extends WalletTabsChild {
   private LENGTH_EXPRESSION_LIMIT: number;
   private availableUnits;
   private unit: string;
@@ -78,15 +82,18 @@ export class AmountPage {
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
     private logger: Logger,
-    private navCtrl: NavController,
+    navCtrl: NavController,
     private navParams: NavParams,
     private nodeWebkitProvider: NodeWebkitProvider,
     private platformProvider: PlatformProvider,
+    profileProvider: ProfileProvider,
     private rateProvider: RateProvider,
     private txFormatProvider: TxFormatProvider,
     private translate: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    walletTabsProvider: WalletTabsProvider
   ) {
+    super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.config = this.configProvider.get();
     this.recipientType = this.navParams.data.recipientType;
@@ -159,17 +166,24 @@ export class AmountPage {
   private setAvailableUnits(): void {
     this.availableUnits = [];
 
-    this.availableUnits.push({
-      name: 'Bitcoin',
-      id: 'btc',
-      shortName: 'BTC'
-    });
+    const parentWalletCoin =
+      this.getParentWallet() && this.getParentWallet().coin;
 
-    this.availableUnits.push({
-      name: 'Bitcoin Cash',
-      id: 'bch',
-      shortName: 'BCH'
-    });
+    if (parentWalletCoin === 'btc' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin',
+        id: 'btc',
+        shortName: 'BTC'
+      });
+    }
+
+    if (parentWalletCoin === 'bch' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin Cash',
+        id: 'bch',
+        shortName: 'BCH'
+      });
+    }
 
     this.unitIndex = 0;
 
@@ -270,7 +284,7 @@ export class AmountPage {
         break;
       default:
         this.showSendMax = true;
-        nextPage = ConfirmPage;
+        nextPage = this.toAddress ? ConfirmPage : SendPage;
     }
     return nextPage;
   }
@@ -308,6 +322,9 @@ export class AmountPage {
   }
 
   public pushDigit(digit: string): void {
+    if (digit === 'delete') {
+      return this.removeDigit();
+    }
     if (
       this.expression &&
       this.expression.length >= this.LENGTH_EXPRESSION_LIMIT
@@ -472,6 +489,11 @@ export class AmountPage {
         useSendMax: this.useSendMax,
         description: this.description
       };
+
+      if (unit.isFiat) {
+        data.fiatAmount = _amount;
+        data.fiatCode = this.fiatCode;
+      }
     }
     this.useSendMax = null;
     this.navCtrl.push(this.nextView, data);

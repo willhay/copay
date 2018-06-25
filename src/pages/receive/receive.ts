@@ -21,12 +21,14 @@ import { WalletProvider } from '../../providers/wallet/wallet';
 
 import * as _ from 'lodash';
 import { PopupProvider } from '../../providers/popup/popup';
+import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
+import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 
 @Component({
   selector: 'page-receive',
   templateUrl: 'receive.html'
 })
-export class ReceivePage {
+export class ReceivePage extends WalletTabsChild {
   public protocolHandler: string;
   public address: string;
   public qrAddress: string;
@@ -38,9 +40,9 @@ export class ReceivePage {
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
-    private navCtrl: NavController,
+    navCtrl: NavController,
     private logger: Logger,
-    private profileProvider: ProfileProvider,
+    profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private platformProvider: PlatformProvider,
     private events: Events,
@@ -49,15 +51,19 @@ export class ReceivePage {
     private translate: TranslateService,
     private externalLinkProvider: ExternalLinkProvider,
     private addressProvider: AddressProvider,
-    private popupProvider: PopupProvider
+    private popupProvider: PopupProvider,
+    walletTabsProvider: WalletTabsProvider
   ) {
+    super(navCtrl, profileProvider, walletTabsProvider);
     this.showShareButton = this.platformProvider.isCordova;
+  }
+
+  ionViewDidLoad() {
+    this.setAddress();
   }
 
   ionViewWillEnter() {
     this.isOpenSelector = false;
-    this.wallets = this.profileProvider.getWallets();
-    this.onWalletSelect(this.checkSelectedWallet(this.wallet, this.wallets));
     this.events.subscribe('bwsEvent', (walletId, type) => {
       // Update current address
       if (this.wallet && walletId == this.wallet.id && type == 'NewIncomingTx')
@@ -67,22 +73,6 @@ export class ReceivePage {
 
   ionViewWillLeave() {
     this.events.unsubscribe('bwsEvent');
-  }
-
-  private onWalletSelect(wallet) {
-    this.wallet = wallet;
-    if (this.wallet) {
-      this.setAddress(false, true);
-    }
-  }
-
-  private checkSelectedWallet(wallet, wallets) {
-    if (!wallet) return wallets[0];
-    let w = _.find(wallets, w => {
-      return w.id == wallet.id;
-    });
-    if (!w) return wallets[0];
-    return wallet;
   }
 
   public requestSpecificAmount(): void {
@@ -125,17 +115,6 @@ export class ReceivePage {
   public shareAddress(): void {
     if (!this.showShareButton) return;
     this.socialSharing.share(this.address);
-  }
-
-  public showWallets(): void {
-    this.isOpenSelector = true;
-    let id = this.wallet ? this.wallet.credentials.walletId : null;
-    this.events.publish('showWalletsSelectorEvent', this.wallets, id);
-    this.events.subscribe('selectWalletEvent', wallet => {
-      if (!_.isEmpty(wallet)) this.onWalletSelect(wallet);
-      this.events.unsubscribe('selectWalletEvent');
-      this.isOpenSelector = false;
-    });
   }
 
   public goCopayers(): void {

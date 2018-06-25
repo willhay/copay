@@ -1,4 +1,4 @@
-import { Component, Output } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -14,14 +14,17 @@ export interface PinButton {
       <ion-col *ngFor="let button of row" (click)="onKeystroke(button.value)" tappable>
         <div>
           <span *ngIf="button.value !== 'delete'">{{button.value}}</span>
-          <img *ngIf="button.value === 'delete'" src="assets/img/tail-left.svg">
+          <img *ngIf="button.value === 'delete' && type ==='pin'" src="assets/img/tail-left.svg">
+          <img class="amount-delete" *ngIf="button.value === 'delete' && type ==='amount'" src="assets/img/icon-delete.svg">
         </div>
-        <div class="letters">{{button.letters}}</div>
+        <div class="letters" *ngIf="type === 'pin'">{{button.letters}}</div>
       </ion-col>
     </ion-row>
   `
 })
 export class PinPad {
+  @Input() type: 'pin' | 'amount';
+
   keystrokeSubject: Subject<string> = new Subject<string>();
   @Output()
   keystroke: Observable<string> = this.keystrokeSubject.asObservable();
@@ -70,7 +73,7 @@ export class PinPad {
     ],
     [
       {
-        value: '',
+        value: '.',
         letters: ''
       },
       {
