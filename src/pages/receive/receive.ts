@@ -211,4 +211,26 @@ export class ReceivePage extends WalletTabsChild {
 
     actionSheet.present();
   }
+
+  public showFullAddr(): void {
+    let buttons = [];
+
+    let specificAmountButton = {
+      text: this.address,
+      cssClass: 'clipboard-actionsheet',
+      handler: () => {
+        console.log(1);
+      }
+    };
+
+    buttons.push(specificAmountButton);
+
+    const actionSheet = this.actionSheetCtrl.create({
+      cssClass: 'clipboard-actionsheet',
+      title: 'Copied BTC Address',
+      buttons
+    });
+
+    actionSheet.present();
+  }
 }

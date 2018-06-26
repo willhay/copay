@@ -217,7 +217,7 @@ page-receive {
       width: 100%;
     }
     width: 25%;
-    max-width:100px;
+    max-width: 100px;
   }
   .wallet-details {
     height: 100%;
@@ -285,5 +285,10 @@ page-receive {
     to {
       transform: rotate(360deg);
     }
+  }
+  .clipboard-actionsheet {
+    background-color: red;
+    color: black;
+    font-weight: 400;
   }
 }
