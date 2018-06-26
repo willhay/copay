@@ -32,6 +32,7 @@ page-receive {
     }
   }
   .qr-container {
+    padding: 4px;
     img {
       opacity: 0.715;
     }
@@ -166,7 +167,60 @@ page-receive {
     background-color: rgb(251, 251, 251);
   }
   .new-address-btn {
+    width: 25px;
+    height: 25px;
+    padding: 0px;
+    vertical-align: middle;
+    padding-bottom: 3px;
+    margin-left: 5px;
     background-color: transparent;
+  }
+  .spin-icon {
+    transition: transform 1000ms ease;
+    transform: rotate(0deg);
+  }
+  .spin-backwards {
+    display: none;
+    transform: rotate(270deg);
+  }
+  .btn-blue {
+    background-color: rgb(84, 118, 235);
+    border-radius: 5px;
+    box-shadow: none;
+    padding: 30px 15px;
+    bottom: 50px;
+    position: absolute;
+    font-size: 18px;
+    width: 80%;
+    max-width: 310px;
+    color: white;
+    font-weight: 400;
+  }
+  .btn-blue.button-md:hover {
+    background-color: rgb(84, 118, 235);
+  }
+  .title-info {
+    font-weight: 600;
+    color: black;
+    font-size: 21px;
+    margin: 30px;
+  }
+  .subtitle-info {
+    color: rgb(74, 74, 74);
+    width: 77%;
+    max-width: 310px;
+    font-size: 17px;
+    margin-bottom: 55px;
+  }
+  .title-icon {
+    img {
+      width: 100%;
+    }
+    width: 25%;
+    max-width:100px;
+  }
+  .wallet-details {
+    height: 100%;
   }
   .loading-dots {
     display: inline-block;
@@ -192,23 +246,20 @@ page-receive {
     vertical-align: middle;
     display: inline-block;
     opacity: 1;
-    transition: opacity 600ms ease;
+    transition: opacity 500ms ease;
   }
   .fade-in-out {
-    opacity: 0;
+    opacity: 0.1;
   }
   .qr-code-bounce {
-    animation: bounce-down 0.6s linear;
+    animation: bounce-down 0.5s linear;
   }
   @keyframes bounce-down {
     0% {
       transform: translate(-50%, -50%);
     }
     50% {
-      transform: translate(-50%, -40%);
-    }
-    55% {
-      transform: translate(-50%, -40%);
+      transform: translate(-50%, -35%);
     }
     100% {
       transform: translate(-50%, -50%);
@@ -217,9 +268,8 @@ page-receive {
   .spinner {
     float: right;
     padding-bottom: 0px;
-    border: 2px solid white;
-    border-top: 2px solid color($colors, success);
-    border-left: 2px solid color($colors, success);
+    border: 1px solid #d0d5ef;
+    border-top: 1px solid #5b7cea;
     border-radius: 50%;
     width: 18px;
     height: 18px;

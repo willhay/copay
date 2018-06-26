@@ -20,6 +20,7 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { PopupProvider } from '../../providers/popup/popup';
 import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
@@ -90,28 +91,48 @@ export class ReceivePage extends WalletTabsChild {
     });
   }
 
-  private setAddress(newAddr?: boolean, changingWallet?: boolean): void {
+  private async setAddress(
+    newAddr?: boolean,
+    changingWallet?: boolean
+  ): Promise<void> {
     this.loading =
       newAddr || _.isEmpty(this.address) || changingWallet ? true : false;
 
-    this.walletProvider
+    let addr: string = (await this.walletProvider
       .getAddress(this.wallet, newAddr)
-      .then(addr => {
-        this.loading = false;
-        this.address = this.walletProvider.getAddressView(this.wallet, addr);
-        this.updateQrAddress();
-      })
       .catch(err => {
         this.loading = false;
         this.logger.warn(this.bwcErrorProvider.msg(err, 'Server Error'));
-      });
+      })) as string;
+    this.loading = false;
+    if (addr != this.address) {
+      let address = await this.walletProvider.getAddressView(this.wallet, addr);
+      this.playAnimation = true;
+      this.updateQrAddress();
+
+      Observable.timer(400)
+        .toPromise()
+        .then(() => {
+          this.address = address;
+        });
+    }
   }
 
-  private updateQrAddress(): void {
-    this.qrAddress = this.walletProvider.getProtoAddress(
+  private async updateQrAddress(): Promise<void> {
+    let qrAddress = await this.walletProvider.getProtoAddress(
       this.wallet,
       this.address
     );
+    Observable.timer(400)
+      .toPromise()
+      .then(() => {
+        this.qrAddress = qrAddress;
+      });
+    Observable.timer(600)
+      .toPromise()
+      .then(() => {
+        this.playAnimation = false;
+      });
   }
 
   public shareAddress(): void {
