@@ -145,8 +145,8 @@
 </ion-content>
 
 <ion-footer>
-  <page-slide-to-accept #slideButton *ngIf="isCordova" [disabled]="!wallet || noWalletMessage || criticalError || !tx?.txp[wallet.id]"
-    [buttonText]="buttonText" (slideDone)="approve(tx, wallet)"></page-slide-to-accept>
+  <page-slide-to-accept #slideButton *ngIf="isCordova" [ngClass]="{'slide-confirm-fast': memoFocused, 'slide-confirm-slow': !memoFocused, 'slide-confirm-down': memoFocused}"
+    [disabled]="!wallet || noWalletMessage || criticalError || !tx?.txp[wallet.id]" [buttonText]="buttonText" (slideDone)="approve(tx, wallet)"></page-slide-to-accept>
   <ion-toolbar *ngIf="!isCordova">
     <button ion-button full class="button-footer" (click)="approve(tx, wallet)" [disabled]="!wallet || noWalletMessage || criticalError || !tx.txp[wallet.id]">{{buttonText}}</button>
   </ion-toolbar>
