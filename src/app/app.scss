@@ -347,6 +347,15 @@ ion-icon {
   &[class*='tab-send'] {
     mask-image: url(../assets/img/tab-icons/ico-send.svg);
   }
+  &[class*='tab-check'] {
+    mask-image: url(../assets/img/green-check-circled.svg);
+  }
+  &[class*='tab-icon-share'] {
+    mask-image: url(../assets/img/icon-share.svg);
+  }
+  &[class*='tab-specific-amount'] {
+    mask-image: url(../assets/img/specific-amount.svg);
+  }
 }
 
 .button-standard {
@@ -423,7 +432,16 @@ ion-alert .alert-message {
     color: black;
     pointer-events: none;
     font-weight: 500;
-    font-size: 17px;
+    font-size: 18px;
+    margin-top: 5px;
+    span {
+      ion-icon {
+        width: 30px !important;
+        height: 30px !important;
+        margin-right: 20px;
+        color: rgb(56, 195, 153);
+      }
+    }
   }
   .copysheet-address {
     pointer-events: none;
@@ -448,9 +466,22 @@ ion-alert .alert-message {
   }
 }
 
-.ion-md-whatsapp:before,
-.ion-ios-whatsapp:before {
-  font-family: "FontAwesome" !important;
-  content: '\f232' !important;
-  color: #25d366;
+.receive-options {
+  .action-sheet-group-cancel:last-child {
+    padding-bottom: 0px;
+  }
+  .option-btn {
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgb(237, 237, 237);
+  }
+  .cancel-btn {
+    background-color: rgb(237, 237, 237);
+    color: black;
+    padding: 25px;
+    text-align: center;
+    font-size: 18px;
+    span {
+      text-align: center;
+    }
+  }
 }

@@ -184,18 +184,28 @@ export class ReceivePage extends WalletTabsChild {
 
     let specificAmountButton = {
       text: this.translate.instant('Request Specific Amount'),
+      icon: 'tab-specific-amount',
+      cssClass: 'option-btn',
       handler: () => {
         this.requestSpecificAmount();
       }
     };
     let shareButton = {
       text: this.translate.instant('Share Address'),
+      icon: 'tab-icon-share',
+      cssClass: 'option-btn',
       handler: () => {
         this.shareAddress();
       }
     };
 
-    buttons.push(specificAmountButton);
+    let cancelButton = {
+      text: this.translate.instant('Cancel'),
+      cssClass: 'cancel-btn',
+      role: 'cancel'
+    };
+
+    buttons.push(specificAmountButton, cancelButton);
 
     if (
       this.showShareButton &&
@@ -206,6 +216,7 @@ export class ReceivePage extends WalletTabsChild {
       buttons.push(shareButton);
 
     const actionSheet = this.actionSheetCtrl.create({
+      cssClass: 'receive-options',
       buttons
     });
 
@@ -213,13 +224,19 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   public showFullAddr(): void {
-    let title = 'Copied ' + this.wallet.coin.toUpperCase() + ' Address';
+    let title =
+      this.translate.instant('Copied') +
+      ' ' +
+      this.wallet.coin.toUpperCase() +
+      ' ' +
+      this.translate.instant('Address');
+
     const actionSheet = this.actionSheetCtrl.create({
       cssClass: 'clipboard-actionsheet',
       buttons: [
         {
           text: title,
-          icon: 'whatsapp',
+          icon: 'tab-check',
           cssClass: 'copysheet-title'
         },
         {
@@ -227,7 +244,7 @@ export class ReceivePage extends WalletTabsChild {
           cssClass: 'copysheet-address'
         },
         {
-          text: 'OK',
+          text: this.translate.instant('OK'),
           cssClass: 'copysheet-ok-btn',
           role: 'cancel'
         }

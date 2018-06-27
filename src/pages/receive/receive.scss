@@ -237,9 +237,6 @@ page-receive {
     max-width: 293px;
     box-shadow: none;
   }
-  .horizontal-lg {
-    transform: rotate(90deg);
-  }
   .address-text {
     width: 70%;
     max-width: 300px;
@@ -290,5 +287,11 @@ page-receive {
     background-color: red;
     color: black;
     font-weight: 400;
+  }
+  .bar-button {
+    margin-right: 10px;
+    .bigger-icon {
+      font-size: 45px;
+    }
   }
 }
