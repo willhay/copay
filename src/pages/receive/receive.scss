@@ -175,13 +175,16 @@ page-receive {
     margin-left: 5px;
     background-color: transparent;
   }
-  .spin-icon {
-    transition: transform 1000ms ease;
-    transform: rotate(0deg);
-  }
   .spin-backwards {
-    display: none;
-    transform: rotate(270deg);
+    animation: spin-backwards 0.5s ease-out 1;
+  }
+  @keyframes spin-backwards {
+    from {
+      transform: rotate(210deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
   }
   .btn-blue {
     background-color: rgb(84, 118, 235);
@@ -273,7 +276,7 @@ page-receive {
     margin: 2px;
   }
   .spin-fast {
-    animation: spin-fast 0.5s linear infinite;
+    animation: spin-fast 0.3s linear infinite;
   }
   @keyframes spin-fast {
     from {
@@ -290,8 +293,11 @@ page-receive {
   }
   .bar-button {
     margin-right: 10px;
-    .bigger-icon {
+    .horizontal-lg {
       font-size: 45px;
+    }
+    .horizontal-lg::before {
+      content: "\f1c8";
     }
   }
 }
