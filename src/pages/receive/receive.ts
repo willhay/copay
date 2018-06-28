@@ -107,7 +107,9 @@ export class ReceivePage extends WalletTabsChild {
     this.loading = false;
     if (addr != this.address) {
       let address = await this.walletProvider.getAddressView(this.wallet, addr);
-      this.playAnimation = true;
+      if (this.address) {
+        this.playAnimation = true;
+      }
       this.updateQrAddress(address);
     }
   }
