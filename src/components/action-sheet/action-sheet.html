@@ -1,0 +1,5 @@
+<div class="backdrop" *ngIf="showActionSheet" (click)="dismiss()">
+</div>
+<div class="action-sheet slider" [ngClass]="{'opened': showSlideEffect, 'closed': !showSlideEffect }" [hidden]="!showActionSheet">
+    <ng-content select="[sheet-content]"></ng-content>
+</div>

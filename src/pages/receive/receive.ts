@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ActionSheetController, Events, NavController } from 'ionic-angular';
+import { Events, NavController } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 
 // Native
@@ -12,6 +12,7 @@ import { AmountPage } from '../send/amount/amount';
 import { CopayersPage } from './../add/copayers/copayers';
 
 // Providers
+import { ActionSheetProvider } from '../../providers/actionSheet/actionSheet';
 import { AddressProvider } from '../../providers/address/address';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
@@ -41,7 +42,7 @@ export class ReceivePage extends WalletTabsChild {
   public playAnimation: boolean;
 
   constructor(
-    private actionSheetCtrl: ActionSheetController,
+    private actionSheetProvider: ActionSheetProvider,
     navCtrl: NavController,
     private logger: Logger,
     profileProvider: ProfileProvider,
@@ -177,47 +178,24 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   public showMoreOptions(): void {
-    let buttons = [];
-
-    let specificAmountButton = {
-      text: this.translate.instant('Request Specific Amount'),
-      icon: 'tab-specific-amount',
-      cssClass: 'option-btn',
-      handler: () => {
-        this.requestSpecificAmount();
-      }
-    };
-    let shareButton = {
-      text: this.translate.instant('Share Address'),
-      icon: 'tab-icon-share',
-      cssClass: 'option-btn',
-      handler: () => {
-        this.shareAddress();
-      }
-    };
-
-    let cancelButton = {
-      text: this.translate.instant('Cancel'),
-      cssClass: 'cancel-btn',
-      role: 'cancel'
-    };
-
-    buttons.push(specificAmountButton, cancelButton);
-
-    if (
+    const showShare =
       this.showShareButton &&
       this.wallet &&
       this.wallet.isComplete() &&
-      !this.wallet.needsBackup
-    )
-      buttons.push(shareButton);
-
-    const actionSheet = this.actionSheetCtrl.create({
-      cssClass: 'receive-options',
-      buttons
+      !this.wallet.needsBackup;
+    const optionsSheet = this.actionSheetProvider.createOptionsSheet(
+      'address-options',
+      showShare
+    );
+    optionsSheet.present();
+    this.events.subscribe('optionSelected', (option: string) => {
+      if (option == 'request-amount') {
+        this.requestSpecificAmount();
+      }
+      if (option == 'share-address') {
+        this.shareAddress();
+      }
     });
-
-    actionSheet.present();
   }
 
   public showFullAddr(): void {
@@ -228,26 +206,10 @@ export class ReceivePage extends WalletTabsChild {
       ' ' +
       this.translate.instant('Address');
 
-    const actionSheet = this.actionSheetCtrl.create({
-      cssClass: 'clipboard-actionsheet',
-      buttons: [
-        {
-          text: title,
-          icon: 'tab-check',
-          cssClass: 'copysheet-title'
-        },
-        {
-          text: this.address,
-          cssClass: 'copysheet-address'
-        },
-        {
-          text: this.translate.instant('OK'),
-          cssClass: 'copysheet-ok-btn',
-          role: 'cancel'
-        }
-      ]
-    });
-
-    actionSheet.present();
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'address-copied',
+      [title, this.address]
+    );
+    infoSheet.present();
   }
 }

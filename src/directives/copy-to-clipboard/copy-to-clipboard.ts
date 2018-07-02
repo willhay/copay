@@ -11,13 +11,14 @@ import { PlatformProvider } from '../../providers/platform/platform';
 
 @Directive({
   selector: '[copy-to-clipboard]', // Attribute selector
-  inputs: ['value: copy-to-clipboard'],
+  inputs: ['value: copy-to-clipboard', 'hideToast: hide-toast'],
   host: {
     '(click)': 'copy()'
   }
 })
 export class CopyToClipboard {
   public value: string;
+  public hideToast: boolean;
   private dom: Document;
   private isCordova: boolean;
   private isNW: boolean;
@@ -56,6 +57,7 @@ export class CopyToClipboard {
     } else {
       this.copyBrowser();
     }
+    if (this.hideToast) return;
     let showSuccess = this.toastCtrl.create({
       message: this.translate.instant('Copied to clipboard'),
       duration: 1000,

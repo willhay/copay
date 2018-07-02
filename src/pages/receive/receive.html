@@ -59,8 +59,8 @@
         </div>
 
         <div class="qr-container">
-          <ngx-qrcode *ngIf="address" class="qr-code" copy-to-clipboard="{{ address }}" qrc-value="{{qrAddress}}" qrc-class="aclass"
-            qrc-errorCorrectionLevel="M"></ngx-qrcode>
+          <ngx-qrcode (click)="showFullAddr()" *ngIf="address" class="qr-code" copy-to-clipboard="{{ address }}" hide-toast="true"
+            qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
             <img src="assets/img/icon-bitcoin-small.svg" alt="BTC" width="12" />
             <span class="address-divider"></span>
             <div [ngClass]="{'fade-in-out': playAnimation}" (click)="showFullAddr()" class="address-text ellipsis">
-              <span copy-to-clipboard="{{ address }}">{{ address }}</span>
+              <span copy-to-clipboard="{{ address }}" hide-toast="true">{{ address }}</span>
             </div>
 
             <button class="new-address-btn" detail-none text-center (click)="setAddress(true)">
