@@ -1,9 +1,11 @@
-import { Component, ComponentRef, ViewChild } from '@angular/core';
+import { ComponentRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActionSheetComponent } from './action-sheet';
 
-export class ActionSheetParent {
-  public componentRef: ComponentRef<Component>;
+export class ActionSheetParent<T> {
+  public componentRef: ComponentRef<T>;
+  public sheetType: string;
+  public sheetTitle: string;
 
   @ViewChild(ActionSheetComponent) actionSheet: ActionSheetComponent;
 

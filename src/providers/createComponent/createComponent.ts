@@ -17,12 +17,12 @@ export class CreateComponentService {
     private appRef: ApplicationRef
   ) {}
 
-  public appendComponentToBody(component: any): ComponentRef<any> {
+  public appendComponentToBody<T>(component: { new (): T }): ComponentRef<T> {
     const componentRef = this.componentFactoryResolver
-      .resolveComponentFactory(component)
+      .resolveComponentFactory<T>(component)
       .create(this.injector);
     this.appRef.attachView(componentRef.hostView);
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>)
+    const domElem = (componentRef.hostView as EmbeddedViewRef<T>)
       .rootNodes[0] as HTMLElement;
     document.getElementsByTagName('ion-app')[0].appendChild(domElem);
     return componentRef;

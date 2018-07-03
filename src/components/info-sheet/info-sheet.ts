@@ -5,7 +5,7 @@ import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
   selector: 'info-sheet',
   templateUrl: 'info-sheet.html'
 })
-export class InfoSheetComponent extends ActionSheetParent {
+export class InfoSheetComponent extends ActionSheetParent<InfoSheetComponent> {
   public sheetType: string;
   public sheetTitle: string;
   public sheetText: string;
