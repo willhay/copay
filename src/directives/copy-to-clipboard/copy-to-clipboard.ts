@@ -44,6 +44,7 @@ export class CopyToClipboard {
     textarea.value = this.value;
     textarea.select();
     this.dom.execCommand('copy');
+    this.dom.body.removeChild(textarea);
   }
 
   public copy() {
