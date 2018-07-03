@@ -3,11 +3,13 @@ import { EXPANDABLE_HEADER_COMPONENTS } from './expandable-header/expandable-hea
 import { InfoSheetComponent } from './info-sheet/info-sheet';
 import { MINI_MODAL_COMPONENTS } from './mini-modal/mini-modal';
 import { OptionsSheetComponent } from './options-sheet/options-sheet';
+import { ReceiveOptionsSheetComponent } from './receive-options/receive-options';
 
 export const COMPONENTS = [
   MINI_MODAL_COMPONENTS,
   EXPANDABLE_HEADER_COMPONENTS,
   ActionSheetComponent,
   InfoSheetComponent,
-  OptionsSheetComponent
+  OptionsSheetComponent,
+  ReceiveOptionsSheetComponent
 ];

@@ -183,8 +183,7 @@ export class ReceivePage extends WalletTabsChild {
       this.wallet &&
       this.wallet.isComplete() &&
       !this.wallet.needsBackup;
-    const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'address-options',
+    const optionsSheet = this.actionSheetProvider.createReceiveOptionsSheet(
       showShare
     );
     optionsSheet.present();
@@ -205,7 +204,7 @@ export class ReceivePage extends WalletTabsChild {
 
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'address-copied',
-      [title, this.address]
+      { title, address: this.address }
     );
     infoSheet.present();
   }
