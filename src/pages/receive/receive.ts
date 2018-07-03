@@ -188,13 +188,10 @@ export class ReceivePage extends WalletTabsChild {
       showShare
     );
     optionsSheet.present();
-    this.events.subscribe('optionSelected', (option: string) => {
-      if (option == 'request-amount') {
-        this.requestSpecificAmount();
-      }
-      if (option == 'share-address') {
-        this.shareAddress();
-      }
+
+    optionsSheet.onDidDismiss(option => {
+      if (option == 'request-amount') this.requestSpecificAmount();
+      if (option == 'share-address') this.shareAddress();
     });
   }
 

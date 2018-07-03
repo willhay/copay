@@ -1,4 +1,5 @@
 import { Component, HostBinding } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'action-sheet',
@@ -13,10 +14,12 @@ export class ActionSheetComponent {
     this.showSlideEffect = false;
   }
 
-  public dismiss(): void {
+  public async dismiss(): Promise<void> {
     this.showSlideEffect = false;
-    setTimeout(() => {
-      this.showActionSheet = false;
-    }, 150);
+    return Observable.timer(400)
+      .toPromise()
+      .then(() => {
+        this.showActionSheet = false;
+      });
   }
 }

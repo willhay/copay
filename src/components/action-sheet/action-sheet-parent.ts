@@ -1,20 +1,21 @@
-import { ViewChild } from '@angular/core';
+import { Component, ComponentRef, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ActionSheetComponent } from './action-sheet';
 
 export class ActionSheetParent {
+  public componentRef: ComponentRef<Component>;
+
   @ViewChild(ActionSheetComponent) actionSheet: ActionSheetComponent;
 
-  public present(): void {
+  public async present(): Promise<void> {
     this.actionSheet.showActionSheet = true;
-    setTimeout(() => {
-      this.actionSheet.showSlideEffect = true;
-    }, 50);
+    await Observable.timer(50).toPromise();
+    this.actionSheet.showSlideEffect = true;
   }
 
-  public dismiss(): void {
-    this.actionSheet.showSlideEffect = false;
-    setTimeout(() => {
-      this.actionSheet.showActionSheet = false;
-    }, 150);
+  public async dismiss(): Promise<void> {
+    await this.actionSheet.dismiss();
+    // this.appRef.detachView(componentRef.hostView);
+    this.componentRef.destroy();
   }
 }
