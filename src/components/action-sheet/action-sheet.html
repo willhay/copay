@@ -1,5 +1,4 @@
-<div class="backdrop" [ngClass]="{'backdrop-fadeout': !showSlideEffect}" *ngIf="showActionSheet" (click)="dismiss()">
-</div>
-<div class="action-sheet" [ngClass]="{'opened': showSlideEffect, 'closed': !showSlideEffect }" [hidden]="!showActionSheet">
-    <ng-content select="[sheet-content]"></ng-content>
+<div class="backdrop" [ngClass]="{'backdrop-fade-in': showSlideEffect}" (click)="dismiss()"></div>
+<div class="action-sheet" [ngClass]="{'opened': showSlideEffect, 'closed': !showSlideEffect }">
+  <ng-content select="[sheet-content]"></ng-content>
 </div>

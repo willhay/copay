@@ -10,7 +10,7 @@ import {
 export type InfoSheetType = 'confirm' | 'warning';
 
 @Injectable()
-export class CreateComponentService {
+export class DomProvider {
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector,
@@ -26,5 +26,10 @@ export class CreateComponentService {
       .rootNodes[0] as HTMLElement;
     document.getElementsByTagName('ion-app')[0].appendChild(domElem);
     return componentRef;
+  }
+
+  public removeComponent<T>(componentRef: ComponentRef<T>) {
+    this.appRef.detachView(componentRef.hostView);
+    componentRef.destroy();
   }
 }

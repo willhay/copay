@@ -3,14 +3,14 @@ import { ActionSheetParent } from '../../components/action-sheet/action-sheet-pa
 import { InfoSheetComponent } from '../../components/info-sheet/info-sheet';
 import { OptionsSheetComponent } from '../../components/options-sheet/options-sheet';
 import { ReceiveOptionsSheetComponent } from '../../components/receive-options/receive-options';
-import { CreateComponentService } from '../../providers/createComponent/createComponent';
+import { DomProvider } from '../../providers/dom/dom';
 
 export type InfoSheetType = 'address-copied';
 export type OptionsSheetType = 'address-options';
 
 @Injectable()
 export class ActionSheetProvider {
-  constructor(public createComponent: CreateComponentService) {}
+  constructor(private domProvider: DomProvider) {}
 
   public createOptionsSheet(type: OptionsSheetType): OptionsSheetComponent {
     const sheet = this.setupSheet<OptionsSheetComponent>(
@@ -40,10 +40,10 @@ export class ActionSheetProvider {
   }
 
   private setupSheet<T extends ActionSheetParent>(
-    componentType: { new (): T },
+    componentType: { new (...args): T },
     sheetType?: string
   ): ComponentRef<T> {
-    const sheet = this.createComponent.appendComponentToBody<T>(componentType);
+    const sheet = this.domProvider.appendComponentToBody<T>(componentType);
     sheet.instance.componentRef = sheet;
     sheet.instance.sheetType = sheetType;
 

@@ -1,5 +1,4 @@
 import { ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ActionSheetComponent } from './action-sheet';
 
 export type dismissFunction = (data?: any) => void;
@@ -12,15 +11,13 @@ export class ActionSheetParent {
   @ViewChild(ActionSheetComponent) actionSheet: ActionSheetComponent;
 
   public async present(): Promise<void> {
-    this.actionSheet.showActionSheet = true;
-    await Observable.timer(50).toPromise();
-    this.actionSheet.showSlideEffect = true;
+    return this.actionSheet.present(this.componentRef);
   }
 
   public async dismiss(): Promise<void> {
+    console.log('calling dismiss');
     await this.actionSheet.dismiss();
-    // this.appRef.detachView(componentRef.hostView);
-    this.componentRef.destroy();
+    console.log('calling remove component');
   }
 
   public onDidDismiss(func: dismissFunction) {

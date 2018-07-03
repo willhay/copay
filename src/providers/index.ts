@@ -30,9 +30,7 @@ export { BwcErrorProvider } from '../providers/bwc-error/bwc-error';
 export { BwcProvider } from '../providers/bwc/bwc';
 export { CoinbaseProvider } from '../providers/coinbase/coinbase';
 export { ConfigProvider } from '../providers/config/config';
-export {
-  CreateComponentService
-} from '../providers/createComponent/createComponent';
+export { DomProvider } from '../providers/dom/dom';
 export {
   DerivationPathHelperProvider
 } from '../providers/derivation-path-helper/derivation-path-helper';

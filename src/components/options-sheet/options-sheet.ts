@@ -12,7 +12,6 @@ export class OptionsSheetComponent extends ActionSheetParent {
   }
 
   public optionClicked(option): void {
-    this.dismissFunction && this.dismissFunction(option);
     this.dismiss();
   }
 }
