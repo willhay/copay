@@ -15,9 +15,7 @@ export class ActionSheetParent {
   }
 
   public async dismiss(): Promise<void> {
-    console.log('calling dismiss');
     await this.actionSheet.dismiss();
-    console.log('calling remove component');
   }
 
   public onDidDismiss(func: dismissFunction) {
