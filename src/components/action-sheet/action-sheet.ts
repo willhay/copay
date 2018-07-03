@@ -7,6 +7,7 @@ import { DomProvider } from '../../providers/dom/dom';
   templateUrl: 'action-sheet.html'
 })
 export class ActionSheetComponent {
+  private transitionDuration: number = 250;
   private parentComponentRef: any;
   @HostBinding('class.open') public slideIn: boolean = false;
 
@@ -20,7 +21,7 @@ export class ActionSheetComponent {
 
   public async dismiss(): Promise<void> {
     this.slideIn = false;
-    await Observable.timer(400).toPromise();
+    await Observable.timer(this.transitionDuration).toPromise();
     this.domProvider.removeComponent(this.parentComponentRef);
   }
 }

@@ -14,8 +14,9 @@ export class ActionSheetParent {
     return this.actionSheet.present(this.componentRef);
   }
 
-  public async dismiss(): Promise<void> {
+  public async dismiss(data?: any): Promise<void> {
     await this.actionSheet.dismiss();
+    this.dismissFunction && this.dismissFunction(data);
   }
 
   public onDidDismiss(func: dismissFunction) {
