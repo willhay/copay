@@ -40,7 +40,7 @@ export class ActionSheetProvider {
   }
 
   private setupSheet<T extends ActionSheetParent>(
-    componentType: { new (...args): T },
+    componentType: { new (): T },
     sheetType?: string
   ): ComponentRef<T> {
     const sheet = this.domProvider.appendComponentToBody<T>(componentType);
