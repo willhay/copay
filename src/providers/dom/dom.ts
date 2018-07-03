@@ -6,9 +6,6 @@ import {
   Injectable,
   Injector
 } from '@angular/core';
-
-export type InfoSheetType = 'confirm' | 'warning';
-
 @Injectable()
 export class DomProvider {
   constructor(
