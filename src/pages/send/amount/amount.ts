@@ -74,6 +74,7 @@ export class AmountPage extends WalletTabsChild {
   public showRecipient: boolean;
   public toWalletId: string;
   private _id: string;
+  public requestingAmount: boolean;
 
   constructor(
     private configProvider: ConfigProvider,
@@ -100,6 +101,7 @@ export class AmountPage extends WalletTabsChild {
     this.color = this.navParams.data.color;
     this.fixedUnit = this.navParams.data.fixedUnit;
     this.description = this.navParams.data.description;
+    this.requestingAmount = this.navParams.get('requestingAmount');
 
     this.showRecipient = true;
     this.showSendMax = false;
@@ -311,7 +313,12 @@ export class AmountPage extends WalletTabsChild {
     if (digit === 'delete') {
       return this.removeDigit();
     }
-    if (!this.expression && digit === '0' && !isHardwareKeyboard) {
+    if (
+      !this.expression &&
+      digit === '0' &&
+      !isHardwareKeyboard &&
+      !this.requestingAmount
+    ) {
       return this.sendMax();
     }
     if (
