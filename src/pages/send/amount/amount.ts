@@ -101,7 +101,6 @@ export class AmountPage extends WalletTabsChild {
     this.color = this.navParams.data.color;
     this.fixedUnit = this.navParams.data.fixedUnit;
     this.description = this.navParams.data.description;
-    this.requestingAmount = this.navParams.get('requestingAmount');
 
     this.showRecipient = true;
     this.showSendMax = false;
@@ -118,6 +117,9 @@ export class AmountPage extends WalletTabsChild {
 
     this.reNr = /^[1234567890\.]$/;
     this.reOp = /^[\*\+\-\/]$/;
+
+    this.requestingAmount =
+      this.navParams.get('nextPage') === 'CustomAmountPage';
     this.nextView = this.getNextView();
 
     this.unitToSatoshi = this.config.wallet.settings.unitToSatoshi;
