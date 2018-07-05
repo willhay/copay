@@ -53,6 +53,7 @@ export class AmountPage extends WalletTabsChild {
   private zone;
   private description: string;
 
+  public onlyIntegers: boolean;
   public alternativeUnit: string;
   public globalResult: string;
   public alternativeAmount;
@@ -101,6 +102,9 @@ export class AmountPage extends WalletTabsChild {
     this.color = this.navParams.data.color;
     this.fixedUnit = this.navParams.data.fixedUnit;
     this.description = this.navParams.data.description;
+    this.onlyIntegers = this.navParams.data.onlyIntegers
+      ? this.navParams.data.onlyIntegers
+      : false;
 
     this.showRecipient = true;
     this.showSendMax = false;
@@ -372,7 +376,9 @@ export class AmountPage extends WalletTabsChild {
   private processAmount(): void {
     let formatedValue = this.format(this.expression);
     let result = this.evaluate(formatedValue);
-    this.allowSend = _.isNumber(result) && +result > 0;
+    this.allowSend = this.onlyIntegers
+      ? _.isNumber(result) && +result > 0 && Number.isInteger(+result)
+      : _.isNumber(result) && +result > 0;
 
     if (_.isNumber(result)) {
       this.globalResult = this.isExpression(this.expression)
