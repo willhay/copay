@@ -49,7 +49,7 @@ ion-label {
 }
 
 // Hide border when refresh
-.has-refresher > .scroll-content {
+.has-refresher>.scroll-content {
   border-top: none !important;
 }
 
@@ -347,15 +347,6 @@ ion-icon {
   &[class*='tab-send'] {
     mask-image: url(../assets/img/tab-icons/ico-send.svg);
   }
-  &[class*='tab-check'] {
-    mask-image: url(../assets/img/green-check-circled.svg);
-  }
-  &[class*='tab-icon-share'] {
-    mask-image: url(../assets/img/icon-share.svg);
-  }
-  &[class*='tab-specific-amount'] {
-    mask-image: url(../assets/img/specific-amount.svg);
-  }
 }
 
 .button-standard {
@@ -418,70 +409,5 @@ ion-alert .alert-message {
   .no-wallets {
     position: absolute;
     top: 60%;
-  }
-}
-
-.clipboard-actionsheet {
-  .copysheet-address {
-    color: rgb(84, 84, 84);
-  }
-  .action-sheet-group {
-    background-color: white;
-  }
-  .copysheet-title {
-    color: black;
-    pointer-events: none;
-    font-weight: 500;
-    font-size: 18px;
-    margin-top: 5px;
-    span {
-      ion-icon {
-        width: 30px !important;
-        height: 30px !important;
-        margin-right: 20px;
-        color: rgb(56, 195, 153);
-      }
-    }
-  }
-  .copysheet-address {
-    pointer-events: none;
-    color: rgb(121, 121, 121);
-    font-size: 15px;
-    padding: 0px 16px;
-    letter-spacing: 1px;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -ms-word-break: break-all;
-    /* Instead use this non-standard one: */
-    word-break: break-word;
-  }
-  .copysheet-ok-btn {
-    margin-top: 10px;
-    span {
-      font-size: 15px;
-      color: rgb(105, 204, 170);
-      padding-top: 18px;
-      border-top: 2px solid rgb(245, 245, 245);
-    }
-  }
-}
-
-.receive-options {
-  .action-sheet-group-cancel:last-child {
-    padding-bottom: 0px;
-  }
-  .option-btn {
-    padding-bottom: 7px;
-    border-bottom: 1px solid rgb(237, 237, 237);
-  }
-  .cancel-btn {
-    background-color: rgb(237, 237, 237);
-    color: black;
-    padding: 25px;
-    text-align: center;
-    font-size: 18px;
-    span {
-      text-align: center;
-    }
   }
 }
