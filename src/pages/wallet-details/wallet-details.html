@@ -128,11 +128,8 @@
 
       <!-- Transactions -->
 
-      <div class="no-tx" *ngIf="showNoTransactionsYetMsg && !updateStatusError" translate>
-        <div class="ghost-icon"></div>
-        <div class="msg-head" translate>It's a ghost town in here</div>
-        <div class="msg-text" translate>If you have funds stored on a website then you should move them into a secure wallet... like this one!
-        </div>
+      <div class="middle-message" *ngIf="showNoTransactionsYetMsg && !updateStatusError" translate>
+        No transactions yet
       </div>
 
       <div class="middle-message" *ngIf="txHistory && !txHistory[0] && updateTxHistoryError" translate>

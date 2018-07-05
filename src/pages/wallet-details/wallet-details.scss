@@ -96,9 +96,11 @@ page-wallet-details {
     .item {
       font-size: 16px;
       padding-left: 19px;
+
       .item-icon {
         margin-right: 15px;
       }
+
       .item-inner {
         background-image: none;
         padding: 11px 10px 11px 0;
@@ -126,6 +128,7 @@ page-wallet-details {
       margin-top: 8px;
     }
   }
+
   .middle-message {
     height: 50%;
     display: flex;
@@ -134,6 +137,7 @@ page-wallet-details {
     justify-content: center;
     text-align: center;
   }
+
   .wallet-info {
     font-weight: 400;
     color: color($colors, light);
@@ -192,6 +196,7 @@ page-wallet-details {
       }
     }
   }
+
   .icon-services {
     border-radius: 50%;
     padding: 1px;
@@ -200,6 +205,7 @@ page-wallet-details {
     box-shadow: none;
     border: 1px solid #d7d7d7;
   }
+
   .locked-balance.item {
     .item-inner {
       padding-bottom: 5px;
@@ -214,58 +220,38 @@ page-wallet-details {
     text-align: end;
     font-size: 12.5px;
   }
-  .no-tx {
-    text-align: center;
-    position: relative;
-    bottom: 0;
-    .msg-head {
-      font-weight: 600;
-      color: black;
-      font-size: 19px;
-      margin: 30px;
-    }
-    .msg-text {
-      color: rgb(74, 74, 74);
-      width: 77%;
-      margin: auto;
-      max-width: 310px;
-      font-size: 17px;
-      margin-bottom: 55px;
-    }
-    .ghost-icon {
-      img {
-        width: 100%;
-      }
-      width: 25%;
-      max-width: 100px;
-    }
-  }
 }
 
 .wallet-details-header {
   ion-title .toolbar-title {
     font-weight: 500;
   }
+
   &:not(.no-subtitle) {
     ion-title .toolbar-title {
       font-weight: 100;
       font-size: 16px;
     }
   }
+
   button.modal-close-button {
     font-size: 16px;
     font-weight: 400;
+
     ion-icon {
       font-size: 20px;
     }
   }
+
   ion-toolbar {
     min-height: 0;
     margin-top: -6px;
+
     &.toolbar-md {
       padding-top: 0;
     }
   }
+
   &__balance {
     text-align: center;
     color: white;
