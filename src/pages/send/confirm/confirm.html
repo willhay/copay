@@ -132,13 +132,10 @@
       </div>
     </button>
 
-    <button ion-item (click)="showDescriptionPopup(tx)">
-      <span *ngIf="!tx.description" translate>Add Memo</span>
-      <span *ngIf="tx.description" translate>Memo</span>
-      <div class="item-memo">
-        <ion-note>{{tx.description}}</ion-note>
-      </div>
-    </button>
+    <editable-item (focus)="memoFocused = $event" (valChange)="tx.description = $event" [value]="tx.description" [itemPlaceholder]="'Enter a transaction memo' | translate">
+      <span item-label translate>Memo</span>
+    </editable-item>
+
   </ion-list>
 
 
